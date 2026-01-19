@@ -2,6 +2,7 @@
 
 Please ensure your pull request adheres to the following guidelines:
 
+- Please make the code simple and clean.
 - Search previous suggestions before making a new one, as yours may be a duplicate.
 - Suggested codebases should be well documented.
 - Make an individual pull request for each suggestion.
