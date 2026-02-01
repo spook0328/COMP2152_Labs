@@ -6,4 +6,5 @@ grade.sort()
 print("Sorted grade: ", grade)
 print("Highest grade: ", grade[-1])
 print("Lowest grade: ", grade[0])
+print("Total grade: ", grade)
 
