@@ -41,10 +41,14 @@ def display_attempts(attempts):
 #   INSERT a row into login_attempts with:
 #     username, success (True or False), and str(datetime.datetime.now())
 #   Commit and close the connection.
+
 def record_attempt(username, success):
     conn = sqlite3.connect(DB_NAME)
     cursor = conn.cursor()
-    cursor.execute()
+    cursor.execute(
+        "INSERT INTO login_attempts (username, success, attempt_date) VALUES (?, ?, ?)",
+        (username, success, str(datetime.datetime.now())),
+    )
     conn.commit()
     conn.close()
 
@@ -55,7 +59,15 @@ def record_attempt(username, success):
 #     WHERE username matches AND success = 0
 #   Fetch all rows, close the connection, and return the list.
 def get_failed_attempts(username):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT * FROM login_attempts WHERE username = ? AND success = 0",
+        (username,)
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
 
 # TODO: Complete count_failures_per_user()
@@ -64,7 +76,14 @@ def get_failed_attempts(username):
 #            WHERE success = 0 GROUP BY username
 #   Fetch all rows, close the connection, and return the list.
 def count_failures_per_user():
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT username, COUNT(*) FROM login_attempts WHERE success = 0 GROUP BY username"
+    )
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
 
 
 # TODO: Complete delete_old_attempts(username)
@@ -73,7 +92,14 @@ def count_failures_per_user():
 #   Commit and close the connection.
 #   Return cursor.rowcount (the number of rows deleted).
 def delete_old_attempts(username):
-    pass
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+    cursor.execute("DELETE from login_attempts WHERE username = ?", (username,))
+    deleted = cursor.rowcount
+    conn. commit()
+    conn.close()
+    return cursor.rowcount
+
 
 
 # --- Main (provided) ---
@@ -132,9 +158,3 @@ if __name__ == "__main__":
         print("  (no failures)")
 
     print("\n" + "=" * 60)
-
-    # conn = sqlite3.connect(DB_NAME)
-    # cursor = conn.cursor()
-    # cursor.execute()
-    # conn.commit()
-    # conn.close()
